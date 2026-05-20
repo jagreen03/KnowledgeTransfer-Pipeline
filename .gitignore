@@ -6,9 +6,16 @@ venv/
 # Video and Media
 *.mp4
 *.mkv
+*.mp3
 frames_part*/
 *.jpg
 
 # Outputs
 extracted_part*.json
 KT_Summary.md
+output_analysis/*
+!output_analysis/.gitkeep
+
+# Keep input folder but ignore content
+input_mp4/*
+!input_mp4/.gitkeep
