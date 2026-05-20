@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ACMP Extraction Telemetry</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 2rem; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .kpi-container { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .kpi-card { flex: 1; background: #e2e8f0; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .kpi-value { font-size: 2rem; font-weight: bold; color: #0f172a; }
+        .kpi-label { font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; }
+        canvas { max-width: 100%; height: 500px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ACMP Pipeline Operations Dashboard</h2>
+        <div class="kpi-container">
+            <div class="kpi-card"><div class="kpi-value" id="kpi-parts">0</div><div class="kpi-label">Parts Processed</div></div>
+            <div class="kpi-card"><div class="kpi-value" id="kpi-time">0s</div><div class="kpi-label">Avg Time / Part</div></div>
+            <div class="kpi-card"><div class="kpi-value" id="kpi-size">0 KB</div><div class="kpi-label">Avg Output Size</div></div>
+        </div>
+        <canvas id="telemetryChart"></canvas>
+    </div>
+
+    <script src="telemetry.js"></script>
+	<!--<script src="file:///C:/ODIN/ACMP_KT_Extractor/telemetry.js"></script>-->
+    
+    <script>
+        const data = telemetryData; 
+        const totalParts = data.length;
+        const avgTime = data.reduce((acc, curr) => acc + curr.time_seconds, 0) / totalParts;
+        const avgSize = data.reduce((acc, curr) => acc + curr.size_bytes, 0) / totalParts;
+
+        document.getElementById('kpi-parts').textContent = totalParts;
+        document.getElementById('kpi-time').textContent = avgTime.toFixed(1) + 's';
+        document.getElementById('kpi-size').textContent = (avgSize / 1024).toFixed(1) + ' KB';
+
+        const chartData = data.map(item => ({ x: item.time_seconds, y: item.size_bytes, session: item.session, part: item.part }));
+        const ctx = document.getElementById('telemetryChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: { datasets: [{ label: 'Extraction Runs', data: chartData, backgroundColor: '#3b82f6', pointRadius: 6, pointHoverRadius: 8 }] },
+            options: {
+                plugins: { tooltip: { callbacks: { label: function(c) { return `Session: ` + c.raw.session + ` | Part: ` + c.raw.part + ` | Time: ` + c.raw.x + `s | Size: ` + c.raw.y + ` bytes`; } } } },
+                scales: { x: { title: { display: true, text: 'Processing Time (Seconds)' } }, y: { title: { display: true, text: 'Output Size (Bytes)' } } }
+            }
+        });
+    </script>
+</body>
+</html>

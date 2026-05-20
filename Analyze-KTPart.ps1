@@ -32,6 +32,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$telemetry = @()
 
 # Discover work
 $parts = @()
@@ -120,6 +121,14 @@ The below lines are the fix
         if (Test-Path $p.OutFile) {
             $size = (Get-Item $p.OutFile).Length
             Write-Host ("         -> extracted_part{0}.json  ({1} bytes, {2:F1}s)`n" -f $p.Part, $size, $sw.Elapsed.TotalSeconds)
+            
+            # Append to telemetry
+            $telemetry += [PSCustomObject]@{
+                session = $p.Folder
+                part = [int]$p.Part
+                size_bytes = $size
+                time_seconds = [math]::Round($sw.Elapsed.TotalSeconds, 1)
+            }
         } else {
             Write-Warning "         No output file written."
         }
@@ -130,3 +139,11 @@ The below lines are the fix
 }
 
 Write-Host "Complete."
+
+# Export Telemetry Data (Overwrite existing file on every iteration)
+if ($telemetry.Count -gt 0) {
+    $jsFile = Join-Path $InputRoot "telemetry.js"
+    # Overwrite the entire file with the current state of the $telemetry array
+    "const telemetryData = " + ($telemetry | ConvertTo-Json -Depth 5 -Compress) + ";" | Out-File -FilePath $jsFile -Encoding UTF8 -Force
+    Write-Host "`n[Telemetry Updated] Dashboard data written to: $jsFile"
+}
