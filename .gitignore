@@ -1,0 +1,14 @@
+# Environments
+whisper_venv_312/
+venv/
+.env
+
+# Video and Media
+*.mp4
+*.mkv
+frames_part*/
+*.jpg
+
+# Outputs
+extracted_part*.json
+KT_Summary.md
