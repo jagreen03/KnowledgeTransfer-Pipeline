@@ -1,0 +1,39 @@
+﻿### ACMP Technical Context Map (Harvested from Existing Extractions) ###
+- Noun: Microservices
+- Noun: Java
+- Noun: Spring Boot
+- Noun: MongoDB
+- Noun: DB2
+- Noun: SOAP services
+- Noun: REST services
+- Noun: XML schema
+- Noun: XML
+- Noun: SOAP
+- Noun: REST
+- Noun: RESTful API
+- Noun: JSON
+- Noun: Mainframe
+- Noun: JavaScript
+- Noun: Angular
+- ACMP -> Case Creation -> CM Gateway
+- Noun: Python
+- User -> Click 'Add Notes' -> ACMP System
+- ACMP System -> Convert Bytecode to Format -> User's Machine
+- User -> Filter Notes -> ACMP System -> Display Results
+- User -> Generate Note -> ACMP System -> Save Note in Database
+- Clinician -> Review -> PCCN
+- Physician -> Decision -> Clinician
+- Noun: Service Oriented Architecture (SOA)
+- Noun: SQL Server
+- Noun: MangoDB
+- Noun: ACMR database
+- Noun: CSV files
+- Queue -> Letter Eligibility -> Letter Generation
+- Noun: Drools
+- PreAuthCaseEventDetail -> EVNT7200 -> OB Event
+- PreAuthCaseEventDetail -> EVNT7400 -> CRM Event
+- Noun: ACMRDB
+- CaseService -> CaseExecutor -> CaseCreation
+- Noun: Maven
+- Noun: Java 17
+
